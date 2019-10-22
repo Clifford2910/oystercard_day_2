@@ -16,9 +16,6 @@ describe Oystercard do
   end
 
   describe '#deduct_fare' do
-    it 'reduces the balance by the amount passed as argument' do
-      expect { oystercard.deduct_fare(1) }.to change{ oystercard.balance }.by -1
-    end
   end
 
   describe '#touch_in' do
@@ -37,6 +34,11 @@ describe Oystercard do
       oystercard.top_up(5)
       oystercard.touch_in
       expect{ oystercard.touch_out }.to change { oystercard.in_journey? }.from(true).to(false)
+    end
+    it 'minimum fare deducted from card' do
+      oystercard.top_up(5)
+      oystercard.touch_in
+      expect{ oystercard.touch_out }.to change { oystercard.balance }. by -Oystercard::MIN_BALANCE
     end
   end
 
